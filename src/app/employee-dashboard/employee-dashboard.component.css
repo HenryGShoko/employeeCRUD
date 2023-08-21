@@ -1,0 +1,168 @@
+::ng-deep .mat-form-field {
+    background-color:white;
+}
+
+::ng-deep  .cdk-overlay-container {
+    position: fixed;
+    z-index: 2000;
+    
+}
+
+.mat-input-element {
+  
+    color: black;
+ 
+}
+
+
+
+.white-text {
+    color: white;
+}
+
+
+.centered-container {
+    display: flex;
+    justify-content: center;  
+    align-items: center;      
+    height: 100%;            
+}
+
+.navbar-content {
+    display: flex;
+    justify-content: space-around; 
+    align-items: center;          
+    width: 80%;                   
+}
+
+
+.title-section, .search-section, .filter-section, .add-btn-section {
+    display: flex;
+    align-items: center;
+}
+
+.search-section .form-control {
+    width: 500px;
+}
+
+.bg-primary {
+    background-color: #130413 !important;
+}
+
+.table th, .table td {
+    background-color: #130413;
+    border-color: #130413;
+}
+
+.modal-content {
+    background-color: #130413;
+}
+
+.table.mt-3,
+.table.mt-3 th,
+.table.mt-3 td,
+.table.mt-3 tr {
+    color: #ffffff;
+}
+
+.custom-table tbody td {
+    background-color: grey;
+}
+
+.title-section {
+    flex-direction: column; 
+    align-items: start;    
+}
+
+.light-placeholder::-webkit-input-placeholder {
+    color: #cccccc;
+}
+
+.no-results-notification {
+    color: red;
+    margin-right: 40px;
+}
+
+.btn:disabled {
+    background-color: grey;
+  }
+  
+
+  .pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    color: #ffffff;
+}
+
+.pagination-controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* Style for the container div */
+.image-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   
+  justify-content: center; 
+
+  position: fixed; 
+  top: 0; 
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+}
+
+/* Style for the image */
+.centered-image {
+  max-width: 100%; 
+  height: auto;
+  margin-bottom: 20px; 
+}
+
+
+
+
+
+
+/* Responsive Table for small screens */
+@media only screen and (max-width: 768px) { 
+
+
+    .table thead {
+        display: none; 
+    }
+
+    .table tr {
+        margin-bottom: 0.625em;
+        display: block;
+    }
+
+    .table td {
+        display: block; 
+        text-align: right;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    .table td::before {
+        content: attr(data-title);
+        position: absolute;
+        left: 0;
+        padding-left: 15px;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    .table td {
+        border-bottom: 1px solid ;
+    }
+
+    .table td:last-child {
+        border-bottom: 0;
+    }
+}

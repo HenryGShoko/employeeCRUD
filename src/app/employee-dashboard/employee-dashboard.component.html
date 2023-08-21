@@ -1,0 +1,481 @@
+<!--NAVBAR START-->
+
+<nav class="navbar navbar-light bg-primary">
+  <div class="container-fluid centered-container">
+    <!-- Navbar Content -->
+    <div class="navbar-content">
+      <!-- Title and Employee Count -->
+      <div class="white-text title-section">
+        <h1>Employees</h1>
+        <p>There are {{ employeeData?.length || 0 }} employees</p>
+      </div>
+
+      <!-- Search Box -->
+      <div class="search-section">
+        <input
+          type="text"
+          class="form-control light-placeholder"
+          placeholder="Search first name, last name, email, Date of Birth or skill "
+          (input)="onSearch($event)"
+        />
+        <!-- Notification for no results -->
+        <div *ngIf="noResultsFound" class="no-results-notification">
+          No employee found.
+        </div>
+      </div>
+
+      <!-- Filter Dropdown -->
+      <div class="filter-section">
+        <select class="form-select" (change)="onFilterChange($event)">
+          <option value="" disabled selected>Filter by</option>
+          <option value="firstName">First Name</option>
+          <option value="lastName">Last Name</option>
+          <option value="email">Email</option>
+          <option value="dateOfBirth">Date of Birth</option>
+          <option value="skill">Skill</option>
+        </select>
+      </div>
+
+      <!-- Add Employee Button -->
+      <div class="add-btn-section">
+        <button
+          (click)="clickAddEmployee()"
+          type="button"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+          class="btn btn-primary"
+        >
+          &#43; Add Employee
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!--NAVBAR END-->
+
+<!--TABLE START-->
+
+<table class="table mt-3 custom-table">
+  <thead>
+    <tr>
+      <th scope="col">Employee ID</th>
+      <th scope="col">First Name</th>
+      <th scope="col">Last Name</th>
+      <th scope="col">Mobile No.</th>
+      <th scope="col">Email ID</th>
+      <th scope="col">Date of Birth.</th>
+      <th scope="col">Street Address</th>
+      <th scope="col">City</th>
+      <th scope="col">Postal Code</th>
+      <th scope="col">Country</th>
+      <th scope="col">Skill</th>
+      <th scope="col">Yrs Exp</th>
+      <th scope="col">Seniority Rating</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of paginatedEmployees">
+      <td data-title="Employee ID">{{ row.id }}</td>
+      <td data-title="First Name">{{ row.firstName }}</td>
+      <td data-title="Last Name">{{ row.lastName }}</td>
+      <td data-title="Mobile No.">{{ row.mobile }}</td>
+      <td data-title="Email ID">{{ row.email }}</td>
+      <td data-title="Date of Birth.">{{ row.dateOfBirth }}</td>
+      <td data-title="Street Address">{{ row.streetAddress }}</td>
+      <td data-title="City">{{ row.city }}</td>
+      <td data-title="Postal Code">{{ row.postalCode }}</td>
+      <td data-title="Country">{{ row.country }}</td>
+      <td data-title="Skill">{{ row.skill }}</td>
+      <td data-title="Yrs Exp">{{ row.yrsExp }}</td>
+      <td data-title="Seniority Rating">{{ row.seniorityRating }}</td>
+
+      <td>
+        <button
+          (click)="onEdit(row)"
+          type="button"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+          class="btn btn-primary"
+        >
+          Edit
+        </button>
+        <button (click)="deleteEmployee(row)" class="btn btn-danger mx-3">
+          Delete
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!--TABLE END-->
+
+<!-- MODAL START -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Employee Details
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="required-indicator">
+        <span class="text-danger">*</span> required
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="formValue">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="firstNameInput" class="form-label"
+                ><span class="text-danger">*</span>First Name
+              </label>
+              <input
+                type="text"
+                formControlName="firstName"
+                class="form-control light-placeholder"
+                id="firstNameInput"
+                placeholder="eg. John"
+              />
+              <div
+                *ngIf="
+                  formValue.get('firstName')?.invalid &&
+                  (formValue.get('firstName')?.dirty ||
+                    formValue.get('firstName')?.touched)
+                "
+                class="text-danger"
+              >
+                Please enter first name.
+              </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="lastNameInput" class="form-label"
+                ><span class="text-danger">*</span>Last Name</label
+              >
+              <input
+                type="text"
+                formControlName="lastName"
+                class="form-control light-placeholder"
+                id="lastNameInput"
+                placeholder="eg. Doe"
+              />
+              <div
+                *ngIf="
+                  formValue.get('lastName')?.invalid &&
+                  (formValue.get('lastName')?.dirty ||
+                    formValue.get('lastName')?.touched)
+                "
+                class="text-danger"
+              >
+                Please enter last name.
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label"
+              ><span class="text-danger">*</span>Mobile Number</label
+            >
+            <input
+              type="text"
+              formControlName="mobile"
+              class="form-control light-placeholder"
+              id="exampleInputPassword1"
+              placeholder="eg. +27 000 111 2222"
+            />
+            <div
+              *ngIf="
+                formValue.get('mobile')?.invalid &&
+                (formValue.get('mobile')?.dirty ||
+                  formValue.get('mobile')?.touched)
+              "
+              class="text-danger"
+            >
+              Please enter mobile number.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label"
+              ><span class="text-danger">*</span>Email ID</label
+            >
+            <input
+              type="email"
+              formControlName="email"
+              class="form-control light-placeholder"
+              id="exampleInputPassword1"
+              placeholder="eg. example@gmail.com"
+            />
+
+            <div
+              *ngIf="
+                formValue.get('email')?.invalid &&
+                (formValue.get('email')?.dirty ||
+                  formValue.get('email')?.touched)
+              "
+              class="text-danger"
+            >
+              Please enter a valid email.
+            </div>
+          </div>
+
+          <mat-form-field>
+            <mat-label>Date of Birth</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="dateOfBirth"
+            />
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <br />
+
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label"
+              ><span class="text-danger">*</span>Street Address</label
+            >
+            <input
+              type="text"
+              formControlName="streetAddress"
+              class="form-control light-placeholder"
+              id="exampleInputPassword1"
+              placeholder="eg. 15 Main Street"
+            />
+            <div
+              *ngIf="
+                formValue.get('streetAddress')?.invalid &&
+                (formValue.get('streetAddress')?.dirty ||
+                  formValue.get('streetAddress')?.touched)
+              "
+              class="text-danger"
+            >
+              Please enter street address.
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <div class="col-md-4">
+              <label for="cityInput" class="form-label"
+                ><span class="text-danger">*</span>City</label
+              >
+              <input
+                type="text"
+                formControlName="city"
+                class="form-control light-placeholder"
+                id="cityInput"
+                placeholder="eg. Sandton"
+              />
+              <div
+                *ngIf="
+                  formValue.get('city')?.invalid &&
+                  (formValue.get('city')?.dirty ||
+                    formValue.get('city')?.touched)
+                "
+                class="text-danger"
+              >
+                Please enter city.
+              </div>
+            </div>
+
+            <!-- Postal Code -->
+            <div class="col-md-4">
+              <label for="postalCodeInput" class="form-label"
+                ><span class="text-danger">*</span>Postal Code</label
+              >
+              <input
+                type="text"
+                formControlName="postalCode"
+                class="form-control light-placeholder"
+                id="postalCodeInput"
+                placeholder="eg. 2130"
+              />
+              <div
+                *ngIf="
+                  formValue.get('postalCode')?.invalid &&
+                  (formValue.get('postalCode')?.dirty ||
+                    formValue.get('postalCode')?.touched)
+                "
+                class="text-danger"
+              >
+                Please enter postal code.
+              </div>
+            </div>
+
+            <!-- Country -->
+            <div class="col-md-4">
+              <label for="countryInput" class="form-label"
+                ><span class="text-danger">*</span>Country</label
+              >
+              <input
+                type="text"
+                formControlName="country"
+                class="form-control light-placeholder"
+                id="countryInput"
+                placeholder="eg. South Africa"
+              />
+              <div
+                *ngIf="
+                  formValue.get('country')?.invalid &&
+                  (formValue.get('country')?.dirty ||
+                    formValue.get('country')?.touched)
+                "
+                class="text-danger"
+              >
+                Please enter country.
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <!-- Start of the row -->
+
+            <div class="col-md-4 mb-3">
+              <label for="skillInput" class="form-label"
+                ><span class="text-danger">*</span>Skill</label
+              >
+              <input
+                type="text"
+                formControlName="skill"
+                class="form-control light-placeholder"
+                id="skillInput"
+                aria-describedby="skillHelp"
+                placeholder="eg. Angular"
+              />
+              <div
+                *ngIf="
+                  formValue.get('skill')?.invalid &&
+                  (formValue.get('skill')?.dirty ||
+                    formValue.get('skill')?.touched)
+                "
+                class="text-danger"
+              >
+                Please enter skill.
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label for="yrsExpInput" class="form-label"
+                ><span class="text-danger">*</span>Yrs Exp</label
+              >
+              <input
+                type="text"
+                formControlName="yrsExp"
+                class="form-control light-placeholder"
+                id="yrsExpInput"
+                aria-describedby="yrsExpHelp"
+                placeholder="eg. 6"
+              />
+              <div
+                *ngIf="
+                  formValue.get('yrsExp')?.invalid &&
+                  (formValue.get('yrsExp')?.dirty ||
+                    formValue.get('yrsExp')?.touched)
+                "
+                class="text-danger"
+              >
+                Please enter yrsExp.
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label for="seniorityRatingInput" class="form-label">
+                <span class="text-danger">*</span>Seniority Rating
+              </label>
+              <select
+                formControlName="seniorityRating"
+                class="form-control light-placeholder"
+                id="seniorityRatingInput"
+                aria-describedby="seniorityRatingHelp"
+              >
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Expert">Expert</option>
+              </select>
+              <div
+                *ngIf="
+                  formValue.get('seniorityRating')?.invalid &&
+                  (formValue.get('seniorityRating')?.dirty ||
+                    formValue.get('seniorityRating')?.touched)
+                "
+                class="text-danger"
+              >
+                Please select a seniority rating.
+              </div>
+            </div>
+          </div>
+          <!-- End of the row -->
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          id="cancel"
+          class="btn btn-danger"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+        <button
+          *ngIf="showAdd"
+          type="button"
+          (click)="postEmployeeDetails()"
+          class="btn btn-success"
+          [disabled]="!formValue.valid"
+        >
+          Add
+        </button>
+
+        <button
+          *ngIf="showUpdate"
+          type="button"
+          (click)="editEmployeeDetails()"
+          class="btn btn-primary"
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL END -->
+
+<!-- IMAGE START -->
+
+<div *ngIf="employeeData?.length === 0" class="image-center">
+  <img src="assets/Icon.JPG" alt="Icon" class="centered-image" />
+  <h5>There is nothing here</h5>
+  <h5>Create a new employee by clicking the new button to get started</h5>
+</div>
+
+<!-- IMAGE END -->
+
+<!-- PAGINATOR START -->
+
+<div class="pagination-controls">
+  <button (click)="previousPage()" [disabled]="currentPage === 1">
+    Previous
+  </button>
+  <span>Page {{ currentPage }} of {{ totalPages }}</span>
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+    Next
+  </button>
+</div>
+
+<!-- PAGINATOR END -->
